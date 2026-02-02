@@ -3,53 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的基金实盘 (GitHub版)</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>我的基金实盘 🚀</title>
     <style>
-        /* --- 样式部分：深色赛博风 --- */
-        :root {
-            --bg: #0f172a; --card: #1e293b; --text: #e2e8f0;
-            --red: #ef4444; --green: #22c55e; --blue: #3b82f6;
-            --border: rgba(255,255,255,0.1);
+        /* --- 样式配置 --- */
+        :root { 
+            --bg: #0f172a; --card: #1e293b; --text: #e2e8f0; 
+            --red: #ef4444; --green: #22c55e; --blue: #3b82f6; 
+            --border: rgba(255,255,255,0.1); 
         }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
+        .container { max-width: 800px; margin: 0 auto; }
         
-        /* 卡片通用样式 */
+        /* 卡片样式 */
         .card { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         
-        /* 顶部概览 */
-        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .kpi .label { font-size: 12px; color: #94a3b8; }
-        .kpi .value { font-size: 24px; font-weight: bold; margin-top: 5px; }
+        /* 数据概览 */
+        .kpi-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 5px; }
+        .kpi-item { text-align: center; }
+        .kpi-label { font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
+        .kpi-val { font-size: 22px; font-weight: bold; }
         
-        /* 输入区域 */
-        .input-group { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
-        input { background: #334155; border: 1px solid var(--border); color: white; padding: 10px; border-radius: 8px; flex: 1; min-width: 120px; }
-        button { cursor: pointer; padding: 10px 20px; border-radius: 8px; border: none; font-weight: bold; transition: 0.2s; }
+        /* 输入框和按钮 */
+        .input-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+        input { background: #334155; border: 1px solid var(--border); color: white; padding: 10px; border-radius: 8px; flex: 1; min-width: 100px; outline: none; }
+        input:focus { border-color: var(--blue); }
+        button { cursor: pointer; padding: 10px 16px; border-radius: 8px; border: none; font-weight: bold; transition: 0.2s; white-space: nowrap; }
         .btn-add { background: var(--blue); color: white; }
         .btn-add:hover { background: #2563eb; }
-        .btn-refresh { background: #475569; color: white; margin-left: auto; }
+        .btn-refresh { font-size: 12px; background: #334155; color: #cbd5e1; padding: 6px 12px; }
+        .btn-refresh:hover { background: #475569; }
 
-        /* 表格样式 */
+        /* 表格 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-        th { text-align: left; color: #94a3b8; padding: 10px 5px; font-weight: normal; font-size: 12px; }
-        td { padding: 12px 5px; border-top: 1px solid var(--border); }
+        th { text-align: left; color: #94a3b8; font-weight: normal; padding: 10px 5px; border-bottom: 1px solid var(--border); font-size: 12px; }
+        td { padding: 12px 5px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        
+        /* 涨跌颜色 */
         .up { color: var(--red); }
         .down { color: var(--green); }
-        .del-btn { color: #94a3b8; cursor: pointer; font-size: 12px; }
+        .neutral { color: var(--text); }
+        
+        .del-btn { color: #64748b; cursor: pointer; font-size: 12px; margin-left: 5px; }
         .del-btn:hover { color: var(--red); text-decoration: underline; }
+        
+        .tag { font-size: 10px; padding: 2px 4px; border-radius: 4px; background: #334155; color: #94a3b8; margin-top: 4px; display: inline-block; }
 
-        /* 移动端适配 */
+        /* 手机适配 */
         @media (max-width: 600px) {
-            .summary-grid { grid-template-columns: 1fr; }
-            .input-group { flex-direction: column; }
-            input { width: 100%; box-sizing: border-box; }
-            td, th { display: block; text-align: right; }
-            td::before { content: attr(data-label); float: left; color: #94a3b8; }
-            thead { display: none; }
-            tr { display: block; margin-bottom: 15px; border: 1px solid var(--border); padding: 10px; border-radius: 8px; }
+            .kpi-box { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .kpi-item:last-child { grid-column: span 2; }
+            th, thead { display: none; }
+            tr { display: flex; flex-direction: column; background: rgba(255,255,255,0.02); padding: 10px; margin-bottom: 10px; border-radius: 8px; }
+            td { display: flex; justify-content: space-between; border: none; padding: 4px 0; }
+            td::before { content: attr(data-label); color: #94a3b8; font-size: 12px; }
         }
     </style>
 </head>
@@ -57,36 +64,36 @@
 
 <div class="container">
     <div class="card">
-        <div style="display:flex; align-items:center;">
-            <h2>📊 资产概览</h2>
-            <button class="btn-refresh" onclick="updateAllData()">🔄 刷新数据</button>
+        <h2>
+            <span>📈 资产概览</span>
+            <button class="btn-refresh" onclick="updateAllData()">🔄 刷新</button>
+        </h2>
+        <div class="kpi-box">
+            <div class="kpi-item">
+                <div class="kpi-label">今日预估盈亏</div>
+                <div class="kpi-val" id="day-profit">--</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-label">持有收益率</div>
+                <div class="kpi-val" id="total-rate">--</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-label">总资产 (预估)</div>
+                <div class="kpi-val" id="total-asset" style="color:#e2e8f0">--</div>
+            </div>
         </div>
-        <div class="summary-grid">
-            <div class="kpi">
-                <div class="label">预估总资产</div>
-                <div class="value" id="total-asset">0.00</div>
-            </div>
-            <div class="kpi">
-                <div class="label">今日预估盈亏</div>
-                <div class="value" id="day-profit">0.00</div>
-            </div>
-            <div class="kpi">
-                <div class="label">持有收益率</div>
-                <div class="value" id="total-rate">0.00%</div>
-            </div>
-        </div>
-        <div style="margin-top: 10px; font-size: 12px; color: #64748b;">
-            * 数据来源：天天基金估值接口 (会有几分钟延迟)
+        <div style="font-size:10px; color:#64748b; text-align:center; margin-top:10px">
+            * 数据来源：天天基金实时估值 (有延迟)
         </div>
     </div>
 
     <div class="card">
-        <h2>📝 持仓管理</h2>
+        <h2>📝 添加/修改持仓</h2>
         <div class="input-group">
-            <input type="text" id="in-code" placeholder="基金代码 (如 110011)">
-            <input type="number" id="in-cost" placeholder="持仓成本价">
-            <input type="number" id="in-share" placeholder="持有份额">
-            <button class="btn-add" onclick="addFund()">+ 添加持仓</button>
+            <input type="text" id="in-code" placeholder="代码 (如 110011)">
+            <input type="number" id="in-cost" placeholder="成本价 (如 2.50)">
+            <input type="number" id="in-share" placeholder="持有份额 (如 1000)">
+            <button class="btn-add" onclick="addFund()">+ 确认</button>
         </div>
     </div>
 
@@ -95,62 +102,85 @@
         <table id="fund-table">
             <thead>
                 <tr>
-                    <th>基金名称</th>
-                    <th>估值/净值</th>
-                    <th>估算涨跌</th>
-                    <th>持有份额</th>
-                    <th>预估市值</th>
-                    <th>今日盈亏</th>
-                    <th>操作</th>
+                    <th width="30%">基金名称</th>
+                    <th width="15%">估值涨跌</th>
+                    <th width="20%">持有/市值</th>
+                    <th width="20%">今日盈亏</th>
+                    <th width="15%">操作</th>
                 </tr>
             </thead>
-            <tbody id="table-body">
-                </tbody>
+            <tbody id="table-body"></tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // --- 核心逻辑部分 ---
+    // --- 逻辑控制中心 ---
 
-    // 1. 数据存取 (使用 LocalStorage)
-    let myFunds = JSON.parse(localStorage.getItem('myFunds')) || [];
+    // 1. 读取本地存储的数据
+    let myFunds = JSON.parse(localStorage.getItem('myFunds_v2')) || [];
 
-    function saveToLocal() {
-        localStorage.setItem('myFunds', JSON.stringify(myFunds));
-        renderTable();
-        calcSummary();
+    // 2. 核心修复：使用 HTTPS 请求数据
+    function fetchFundData(code) {
+        // 创建一个 script 标签来跨域加载数据
+        const script = document.createElement('script');
+        // 【关键点】这里必须用 https，且加一个随机数防止缓存
+        script.src = `https://fundgz.1234567.com.cn/js/${code}.js?rt=${Date.now()}`;
+        
+        // 如果加载失败（比如代码填错了）
+        script.onerror = () => {
+            console.log("加载失败:", code);
+            const fund = myFunds.find(f => f.code === code);
+            if(fund) {
+                fund.name = "❌ 代码错误或接口异常";
+                fund.gz = 0; fund.rate = 0;
+                renderTable(); // 刷新显示错误状态
+            }
+            script.remove();
+        };
+        
+        document.body.appendChild(script);
+        // 加载成功后自动移除标签，保持页面整洁
+        script.onload = () => script.remove();
     }
 
-    // 2. 添加基金
+    // 3. 天天基金的回调函数 (API返回的数据会调用这个函数)
+    window.jsonpgz = function(data) {
+        const fund = myFunds.find(f => f.code === data.fundcode);
+        if (fund) {
+            fund.name = data.name;
+            fund.gz = parseFloat(data.gsz);    // 实时估值
+            fund.rate = parseFloat(data.gszzl);// 涨跌幅%
+            fund.time = data.gztime;           // 更新时间
+            
+            saveToLocal(); // 保存最新数据
+            calcSummary(); // 重新计算总收益
+        }
+    };
+
+    // 4. 添加或更新基金
     function addFund() {
         const code = document.getElementById('in-code').value.trim();
         const cost = parseFloat(document.getElementById('in-cost').value);
         const share = parseFloat(document.getElementById('in-share').value);
 
         if (!code || isNaN(cost) || isNaN(share)) {
-            alert("请完整填写信息！");
+            alert("请完整填写代码、成本和份额 (oﾟvﾟ)ノ");
             return;
         }
 
-        // 检查是否已存在
-        const exists = myFunds.find(f => f.code === code);
-        if (exists) {
-            if(confirm('该基金已存在，要更新持仓数据吗？')) {
-                exists.cost = cost;
-                exists.share = share;
+        const existing = myFunds.find(f => f.code === code);
+        if (existing) {
+            if(confirm('这个基金已经有了，要更新成本和份额吗？')) {
+                existing.cost = cost;
+                existing.share = share;
             }
         } else {
-            myFunds.push({ 
-                code, cost, share, 
-                name: '加载中...', 
-                gz: 0, // 估值
-                rate: 0 // 涨跌幅
-            });
+            myFunds.push({ code, cost, share, name: '加载中...', gz: 0, rate: 0 });
         }
-        
+
         saveToLocal();
-        updateAllData(); // 立即去抓数据
+        updateAllData();
         
         // 清空输入框
         document.getElementById('in-code').value = '';
@@ -158,81 +188,58 @@
         document.getElementById('in-share').value = '';
     }
 
-    // 3. 删除基金
+    // 5. 删除基金
     function deleteFund(code) {
-        if(confirm('确定删除吗？')) {
+        if(confirm('确定不再关注这个基金了吗？')) {
             myFunds = myFunds.filter(f => f.code !== code);
             saveToLocal();
+            renderTable();
+            calcSummary();
         }
     }
 
-    // 4. 核心：JSONP 获取天天基金数据
-    // 技巧：我们创建一个 <script> 标签去加载数据，绕过跨域限制
-    function fetchFundData(code) {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            // 天天基金接口：http://fundgz.1234567.com.cn/js/CODE.js
-            script.src = `http://fundgz.1234567.com.cn/js/${code}.js?rt=${Date.now()}`;
-            script.onerror = () => {
-                console.error(`加载失败: ${code}`);
-                // 加载失败时给个默认值
-                window.jsonpgz({ fundcode: code, name: "加载失败", gsz: "0", gszzl: "0" });
-                script.remove();
-            };
-            document.body.appendChild(script);
-            
-            // 稍后移除 script 标签，保持页面干净
-            script.onload = () => script.remove();
-        });
+    // 6. 保存到浏览器
+    function saveToLocal() {
+        localStorage.setItem('myFunds_v2', JSON.stringify(myFunds));
+        renderTable();
     }
 
-    // 5. 天天基金的回调函数 (必须叫这个名字)
-    // 接口返回的数据格式是：jsonpgz({...数据...});
-    window.jsonpgz = function(data) {
-        const fund = myFunds.find(f => f.code === data.fundcode);
-        if (fund) {
-            fund.name = data.name;
-            fund.gz = parseFloat(data.gsz); // 估算净值
-            fund.rate = parseFloat(data.gszzl); // 估算涨跌幅
-            saveToLocal(); // 更新完保存
-        }
-    };
-
-    // 6. 批量更新所有数据
-    function updateAllData() {
-        myFunds.forEach(fund => {
-            fetchFundData(fund.code);
-        });
-    }
-
-    // 7. 渲染表格
+    // 7. 渲染表格 (把数据变成 HTML)
     function renderTable() {
         const tbody = document.getElementById('table-body');
         tbody.innerHTML = '';
 
         myFunds.forEach(f => {
-            const marketValue = f.gz * f.share; // 市值
-            const dayProfit = (f.gz * f.rate / 100) * f.share; // 粗略估算今日盈亏：市值 * 涨跌幅
-            // 注意：这里算今日盈亏如果用 (现价-昨收)*份额 会更准，但接口直接给了涨跌幅，直接用涨跌幅算方便点
-            // 更精准逻辑：今日盈亏 = (估值 - 估值/(1+涨跌幅%)) * 份额
-
-            const realDayProfit = marketValue - (marketValue / (1 + f.rate/100));
-
+            const marketValue = f.gz * f.share;
+            // 简单算法：今日盈亏 ≈ 市值 * 涨跌幅% (仅供参考)
+            const dayProfit = (marketValue / (1 + f.rate/100)) * (f.rate/100);
+            
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td data-label="名称"><b>${f.name}</b><br><span style="color:#64748b;font-size:12px">${f.code}</span></td>
-                <td data-label="估值">${f.gz.toFixed(4)}</td>
-                <td data-label="涨跌" class="${f.rate >= 0 ? 'up' : 'down'}">${f.rate >= 0 ? '+' : ''}${f.rate}%</td>
-                <td data-label="份额">${f.share}</td>
-                <td data-label="市值">¥${marketValue.toFixed(2)}</td>
-                <td data-label="今日盈亏" class="${f.rate >= 0 ? 'up' : 'down'}">${realDayProfit.toFixed(2)}</td>
-                <td data-label="操作"><span class="del-btn" onclick="deleteFund('${f.code}')">删除</span></td>
+                <td data-label="名称">
+                    <div style="font-weight:bold">${f.name}</div>
+                    <div class="tag">${f.code}</div>
+                </td>
+                <td data-label="估值" class="${f.rate >= 0 ? 'up' : 'down'}">
+                    <div>${f.gz.toFixed(4)}</div>
+                    <div style="font-size:12px">${f.rate >= 0 ? '+' : ''}${f.rate}%</div>
+                </td>
+                <td data-label="持有">
+                    <div>${f.share}份</div>
+                    <div style="color:#94a3b8;font-size:12px">¥${marketValue.toFixed(0)}</div>
+                </td>
+                <td data-label="今日盈亏" class="${dayProfit >= 0 ? 'up' : 'down'}" style="font-weight:bold">
+                    ${dayProfit >= 0 ? '+' : ''}${dayProfit.toFixed(1)}
+                </td>
+                <td data-label="操作">
+                    <span class="del-btn" onclick="deleteFund('${f.code}')">删除</span>
+                </td>
             `;
             tbody.appendChild(tr);
         });
     }
 
-    // 8. 计算总资产
+    // 8. 计算顶部汇总
     function calcSummary() {
         let totalAsset = 0;
         let totalDayProfit = 0;
@@ -241,7 +248,9 @@
         myFunds.forEach(f => {
             if (f.gz > 0) {
                 const mv = f.gz * f.share;
-                const profit = mv - (mv / (1 + f.rate/100));
+                // 反推昨日市值来计算今日盈亏
+                const yesterdayMv = mv / (1 + f.rate/100);
+                const profit = mv - yesterdayMv;
                 
                 totalAsset += mv;
                 totalDayProfit += profit;
@@ -255,16 +264,21 @@
         
         const dayEl = document.getElementById('day-profit');
         dayEl.innerText = `${totalDayProfit >= 0 ? '+' : ''}${totalDayProfit.toFixed(2)}`;
-        dayEl.className = `value ${totalDayProfit >= 0 ? 'up' : 'down'}`;
+        dayEl.className = `kpi-val ${totalDayProfit >= 0 ? 'up' : 'down'}`;
 
         const rateEl = document.getElementById('total-rate');
         rateEl.innerText = `${totalRate >= 0 ? '+' : ''}${totalRate.toFixed(2)}%`;
-        rateEl.className = `value ${totalRate >= 0 ? 'up' : 'down'}`;
+        rateEl.className = `kpi-val ${totalRate >= 0 ? 'up' : 'down'}`;
     }
 
-    // 启动时加载数据
-    renderTable();
-    updateAllData();
+    // 9. 批量更新
+    function updateAllData() {
+        myFunds.forEach(fund => fetchFundData(fund.code));
+    }
+
+    // --- 启动引擎 ---
+    renderTable(); // 先显示已有数据
+    updateAllData(); // 立即联网更新
     
     // 每60秒自动刷新一次
     setInterval(updateAllData, 60000);
